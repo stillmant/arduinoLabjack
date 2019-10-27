@@ -4,7 +4,7 @@
 #define ARDUINO_LABJACK_H
 
 #include <Arduino.h>
-#include <ArduinoLabjack.h>
+#include "ArduinoLabjack.h"
 #include <Ethernet.h>
 #include <SPI.h>
 #include <ArduinoRS485.h>

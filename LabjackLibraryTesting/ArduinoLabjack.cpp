@@ -1,11 +1,10 @@
 
 #include <Arduino.h>
-#include <ArduinoLabjack.h>
+#include "ArduinoLabjack.h"
 #include <Ethernet.h>
 #include <SPI.h>
 #include <ArduinoRS485.h>
 #include <ArduinoModbus.h>
-#include <LabJackMModbusMap.h>
 
 int LJM_Open(EthernetClient *client, ModbusTCPClient *modbusTCPClient, IPAddress server){
     if (!modbusTCPClient->begin(server, 502)) {
