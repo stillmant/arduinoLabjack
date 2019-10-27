@@ -9,7 +9,7 @@ byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 IPAddress ip(192, 168, 1, 178);
 byte server[] = { 192, 168, 1, 214 }; // Labjack
 
-float reg = 1122867;
+float reg = -1;
 float value;
 
 EthernetClient client;
