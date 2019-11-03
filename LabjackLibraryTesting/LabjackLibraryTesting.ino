@@ -9,10 +9,11 @@ byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 IPAddress ip(192, 168, 1, 178);
 byte server[] = { 192, 168, 1, 214 }; // Labjack
 
-float STREAM_SCANRATE_HZ = 5;
+float STREAM_SCANRATE_HZ = 100;
 float STREAM_NUM_ADDRESSES = 2;
 float STREAM_SAMPLES_PER_PACKET = 5;
 float STREAM_AUTO_TARGET = 0x01;
+float STREAM_NUM_SCANS = 0;
 float address1 = 0;
 float address2 = 2;
 
@@ -36,30 +37,41 @@ void setup() {
   Ethernet.begin(mac, ip);
   Serial.begin(9600);
   LJM_Open(&client, &modbusTCPClient, server);
-  if (!modbusStream.begin(server, 702)) {
-      Serial.println("Modbus TCP Client failed to connect!");
-  } else {
-      Serial.println("Modbus connected");
-  } 
   LJM_eWriteAddress(&modbusTCPClient, 4002, 3, STREAM_SCANRATE_HZ);
   LJM_eWriteAddress(&modbusTCPClient, 4004, 1, STREAM_NUM_ADDRESSES);
   LJM_eWriteAddress(&modbusTCPClient, 4006, 1, STREAM_SAMPLES_PER_PACKET);
   LJM_eWriteAddress(&modbusTCPClient, 4016, 1, STREAM_AUTO_TARGET);
+  LJM_eWriteAddress(&modbusTCPClient, 4020, 1, STREAM_NUM_SCANS);
   LJM_eWriteAddress(&modbusTCPClient, 4100, 1, address1);
   LJM_eWriteAddress(&modbusTCPClient, 4102, 1, address2);
   LJM_eWriteAddress(&modbusTCPClient, 4990, 1, (float)1);
-  delay(3000);
-  LJM_eWriteAddress(&modbusTCPClient, 4990, 1, (float)0);
+  //delay(3000);
+  //LJM_eWriteAddress(&modbusTCPClient, 4990, 1, (float)0);
+  if (!stream.connect(server, 702)) {
+      Serial.println("Ethernet didn't connect!");
+  } else {
+      Serial.println("Ethernet connected");
+  } 
 }
 
 void loop() {
   
 //  LJM_eReadAddress(&modbusTCPClient, 4006, 0, &value);
-//  Serial.println(value, HEX);
-//  Serial.println(value);
+
+//  Serial.println(stream.connect(server, 702));
+//  while(!stream.available())
+//    ;
+//  while(stream.available()){
+//    Serial.println(stream.read());
+//  }
+//  stream.stop();
+//  delay(100);
+  stream.connect(server, 702);
   while(stream.available()){
     Serial.println(stream.read());
   }
-  Serial.println("test");
+  stream.stop();
   delay(100);
+  //LJM_eWriteAddress(&modbusTCPClient, 4990, 1, (float)0);
+
 }
